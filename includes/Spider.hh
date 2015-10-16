@@ -1,13 +1,17 @@
-#include	<iostream>
+#ifndef			_SPIDER_HH_
+# define		_SPIDER_HH_
+# include		<iostream>
+# include		<list>
+# include		<Client.hh>
 
-#ifndef		_SPIDER_HH_
- #define	_SPIDER_HH_
-
-class		Spider
+class			Spider
 {
+private:
+  std::list<Client>	_clients;
+
 public:
-  Spider();
-  ~Spider();
+  explicit		Spider();
+  virtual		~Spider();
 };
 
 #endif
