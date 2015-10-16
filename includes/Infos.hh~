@@ -1,9 +1,0 @@
-#ifndef		_INFOS_HH_
-# define	_INFOS_HH_
-
-class		Infos
-{
-
-};
-
-#endif
