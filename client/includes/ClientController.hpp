@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 06:38:39 2015 Joris Bertomeu
-// Last update Wed Oct 21 07:04:57 2015 Joris Bertomeu
+// Last update Wed Oct 21 07:11:31 2015 Joris Bertomeu
 //
 
 #ifndef		_CLIENTCONTROLLER_HPP_
@@ -33,7 +33,12 @@ public:
   void		init(int ac, char **argv) {
     if (ac != 3)
       throw std::logic_error("Usage : ./client_spider <ip_srv> <port>");
-  }
+    try {
+      this->_clientModel.getNetworkController().init(ac, argv);
+    } catch (const std::exception &e) {
+      throw std::logic_error(e.what());
+    }
+}
   void		start() {
 
   }

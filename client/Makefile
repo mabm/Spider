@@ -5,10 +5,10 @@
 ## Login   <mediav_j@epitech.net>
 ## 
 ## Started on  Tue Jun  9 19:35:05 2015 Jérémy Mediavilla
-## Last update Wed Oct 21 06:58:17 2015 Joris Bertomeu
+## Last update Wed Oct 21 10:55:24 2015 Joris Bertomeu
 ##
 
-CXX		=	clang++
+CXX		=	clang++ -g3
 
 CXXFLAGS	+=	-W -Wextra -Wall -Iincludes
 
