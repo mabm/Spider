@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 02:29:24 2015 Joris Bertomeu
-// Last update Wed Oct 21 05:19:27 2015 Joris Bertomeu
+// Last update Wed Oct 21 11:06:43 2015 Joris Bertomeu
 //
 
 #ifndef		_CONNECTION_HPP_
@@ -43,7 +43,7 @@ public:
 
 private:
   explicit	Connection(boost::asio::io_service &io_service) : _socket(io_service) {
-    this->_handshake = "Salut poupee\n";
+    this->_handshake = "Salut poupee\r\n";
   }
   void		handleWrite(const boost::system::error_code &e, size_t bytes_transferred) {
     if (!e)
