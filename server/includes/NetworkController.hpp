@@ -5,22 +5,24 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 00:55:19 2015 Joris Bertomeu
-// Last update Wed Oct 21 01:55:06 2015 Joris Bertomeu
+// Last update Wed Oct 21 03:24:17 2015 Joris Bertomeu
 //
 
 #ifndef		_NETWORKCONTROLLER_HPP_
 # define	_NETWORKCONTROLLER_HPP_
-# include	<INetwork.hpp>
+# include	<Connection.hpp>
 # include	<NetworkModel.hpp>
 # include	<NetworkView.hpp>
 # include	<stdexcept>
 # include	<sstream>
 
-class		NetworkController :	INetwork
+class		NetworkController
 {
 private:
   NetworkModel	_networkModel;
   NetworkView	_networkView;
+  boost::asio::ip::tcp::acceptor	*_acceptor;
+  boost::asio::io_service		_io_service;
 
 public:
   explicit	NetworkController() {
@@ -46,8 +48,27 @@ public:
 
       ss << this->_networkModel.setPortNo(this->checkPort(ac, argv));
       this->_networkView.log(LOG_LVL_1, std::string("Port setted : " + ss.str()));
+      this->_acceptor = new boost::asio::ip::tcp::acceptor(this->_io_service,
+							   boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), std::atoi(ss.str().c_str())));
+      this->accept();
+      std::cout << "IO Service Started : " << this->_io_service.run() << std::endl;
     } catch (const std::exception &e) {
       throw std::logic_error(e.what());
+    }
+  }
+private:
+  void		accept() {
+    Connection::ptr	newConnection = Connection::create(this->_acceptor->get_io_service());
+
+    this->_acceptor->async_accept(newConnection->socket(),
+				  boost::bind(&NetworkController::handleAccept,
+					      this, newConnection,
+					      boost::asio::placeholders::error));
+  }
+  void		handleAccept(Connection::ptr newConnection, const boost::system::error_code &e) {
+    if (!e) {
+      newConnection->start();
+      accept();
     }
   }
 };
