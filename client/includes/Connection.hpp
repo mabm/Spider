@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 02:29:24 2015 Joris Bertomeu
-// Last update Wed Oct 21 10:49:21 2015 Joris Bertomeu
+// Last update Wed Oct 21 12:17:26 2015 Joris Bertomeu
 //
 
 #ifndef		_CONNECTION_HPP_
@@ -33,12 +33,14 @@ public:
   boost::asio::ip::tcp::socket&	socket() {
     return this->_socket;
   }
+  void		write(const std::string &trame) {
+    boost::asio::async_write(this->_socket,
+    			     boost::asio::buffer(trame),
+    			     boost::bind(&Connection::handleWrite, shared_from_this(),
+    					 boost::asio::placeholders::error,
+    			        	 boost::asio::placeholders::bytes_transferred));
+  }
   void		read() {
-    // boost::asio::async_write(this->_socket,
-    // 			     boost::asio::buffer(this->_handshake),
-    // 			     boost::bind(&Connection::handleWrite, shared_from_this(),
-    // 					 boost::asio::placeholders::error,
-    // 					 boost::asio::placeholders::bytes_transferred));
     boost::asio::async_read_until(this->_socket,
 				  this->_buff,
 				  "\r\n",
@@ -53,7 +55,7 @@ private:
   }
   void		handleWrite(const boost::system::error_code &e, size_t bytes_transferred) {
     if (!e)
-      this->listenClient();
+      this->read();
     else
       this->close();
   }

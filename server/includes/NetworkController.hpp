@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 00:55:19 2015 Joris Bertomeu
-// Last update Wed Oct 21 05:24:05 2015 Joris Bertomeu
+// Last update Wed Oct 21 12:15:46 2015 Joris Bertomeu
 //
 
 #ifndef		_NETWORKCONTROLLER_HPP_
@@ -19,8 +19,8 @@
 class		NetworkController
 {
 private:
-  NetworkModel	_networkModel;
-  NetworkView	_networkView;
+  NetworkModel				_networkModel;
+  NetworkView				_networkView;
   boost::asio::ip::tcp::acceptor	*_acceptor;
   boost::asio::io_service		_io_service;
 
