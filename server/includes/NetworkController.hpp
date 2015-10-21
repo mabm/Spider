@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 00:55:19 2015 Joris Bertomeu
-// Last update Wed Oct 21 03:24:17 2015 Joris Bertomeu
+// Last update Wed Oct 21 05:20:08 2015 Joris Bertomeu
 //
 
 #ifndef		_NETWORKCONTROLLER_HPP_
@@ -15,6 +15,8 @@
 # include	<NetworkView.hpp>
 # include	<stdexcept>
 # include	<sstream>
+# include	<boost/thread.hpp>
+# include	<boost/chrono.hpp>
 
 class		NetworkController
 {
@@ -51,7 +53,7 @@ public:
       this->_acceptor = new boost::asio::ip::tcp::acceptor(this->_io_service,
 							   boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), std::atoi(ss.str().c_str())));
       this->accept();
-      std::cout << "IO Service Started : " << this->_io_service.run() << std::endl;
+      this->_io_service.run();
     } catch (const std::exception &e) {
       throw std::logic_error(e.what());
     }
@@ -65,8 +67,13 @@ private:
 					      this, newConnection,
 					      boost::asio::placeholders::error));
   }
+  static void		newConnectionTh(boost::shared_ptr<Connection> &obj) {
+    obj->start();
+  }
   void		handleAccept(Connection::ptr newConnection, const boost::system::error_code &e) {
     if (!e) {
+
+      //      boost::thread	t(boost::bind(&this->newConnectionTh, newConnection));
       newConnection->start();
       accept();
     }
