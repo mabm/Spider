@@ -56,7 +56,7 @@ private:
     std::istream	is(&this->_buff);
 
     std::getline(is, data);
-    std::cout << "Say from Read : " << data << std::endl;
+    std::cout << "From " << this->_socket.remote_endpoint().address().to_string() << " : " << data << std::endl;
     if (!e)
       this->listenClient();
     else
@@ -69,7 +69,6 @@ private:
 				  boost::bind(&Connection::handleRead, shared_from_this(),
 					      boost::asio::placeholders::error,
 					      boost::asio::placeholders::bytes_transferred));
-    //ADD TIMER
   }
   void		close() {
     this->_socket.close();
