@@ -5,7 +5,7 @@
 ## Login   <mediav_j@epitech.net>
 ## 
 ## Started on  Tue Jun  9 19:35:05 2015 Jérémy Mediavilla
-## Last update Wed Oct 21 06:30:34 2015 Joris Bertomeu
+## Last update Mon Oct 26 15:41:54 2015 Jérémy Mediavilla
 ##
 
 CXX		=	clang++
@@ -15,6 +15,10 @@ CXXFLAGS	+=	-W -Wextra -Wall -Iincludes -lboost_system
 RM		=	rm -f
 
 SRC		=	src/main.cpp				\
+			src/CurrentWindowCommand.cpp		\
+			src/KeyCommand.cpp			\
+			src/MouseCommand.cpp			\
+			src/ResponseCommand.cpp			\
 
 OBJ		=	$(SRC:.cpp=.o)
 
