@@ -5,12 +5,12 @@
 ## Login   <mediav_j@epitech.net>
 ## 
 ## Started on  Tue Jun  9 19:35:05 2015 Jérémy Mediavilla
-## Last update Mon Oct 26 15:41:54 2015 Jérémy Mediavilla
+## Last update Tue Oct 27 11:37:26 2015 Joris Bertomeu
 ##
 
 CXX		=	clang++
 
-CXXFLAGS	+=	-W -Wextra -Wall -Iincludes -lboost_system
+CXXFLAGS	+=	-W -Wextra -Wall -Iincludes `pkg-config --cflags libcurl`
 
 RM		=	rm -f
 
@@ -28,7 +28,7 @@ all:		$(NOM)
 
 $(NOM):		$(OBJ)
 		@echo -e "\n > COMPILATION DES .CPP SPIDER SERVER EN COURS\n"
-		$(CXX) -o $(NOM) $(OBJ) -lboost_system
+		$(CXX) -o $(NOM) $(OBJ) -lboost_system `pkg-config --libs libcurl`
 		@echo -e "\n > COMPILATION DES .CPP SPIDER SERVER TERMINEE"
 
 clean:

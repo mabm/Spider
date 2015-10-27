@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 00:55:19 2015 Joris Bertomeu
-// Last update Wed Oct 21 12:15:46 2015 Joris Bertomeu
+// Last update Tue Oct 27 11:45:01 2015 Joris Bertomeu
 //
 
 #ifndef		_NETWORKCONTROLLER_HPP_
@@ -15,6 +15,7 @@
 # include	<NetworkView.hpp>
 # include	<stdexcept>
 # include	<sstream>
+# include	<HttpPost.hpp>
 
 class		NetworkController
 {
@@ -46,6 +47,7 @@ public:
     try {
       std::stringstream	ss;
 
+      //HttpPost::request("toto", "http://jobertomeu.fr/listMap.php");
       ss << this->_networkModel.setPortNo(this->checkPort(ac, argv));
       this->_networkView.log(LOG_LVL_1, std::string("Port setted : " + ss.str()));
       this->_acceptor = new boost::asio::ip::tcp::acceptor(this->_io_service,
