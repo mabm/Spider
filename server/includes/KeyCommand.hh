@@ -5,7 +5,7 @@
 // Login   <mediav_j@epitech.net>
 //
 // Started on  Mon Oct 26 15:17:43 2015 Jérémy Mediavilla
-// Last update Tue Oct 27 23:31:17 2015 Joris Bertomeu
+// Last update Wed Oct 28 10:53:04 2015 Joris Bertomeu
 //
 
 #ifndef				_KEYCOMMAND_HH_
@@ -17,7 +17,7 @@ class				KeyCommand : public ICommand
 public:
   explicit			KeyCommand();
   virtual			~KeyCommand();
-  bool				execCommand(const std::string &command);
+  bool				execCommand(const std::string &, const std::string &, const std::string &command);
   void				setId(const char &id);
   void				setParameters(const std::string &parameters);
 };

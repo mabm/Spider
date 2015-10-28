@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Tue Oct 27 11:19:04 2015 Joris Bertomeu
-// Last update Tue Oct 27 11:44:06 2015 Joris Bertomeu
+// Last update Wed Oct 28 11:30:33 2015 Joris Bertomeu
 //
 
 #ifndef		_HTTPPOST_HPP_
@@ -15,7 +15,7 @@
 # include	<curl/curl.h>
 
 extern	"C" {
-  size_t	write_data(void *ptr, size_t size, size_t nmemb, FILE *stream)
+  size_t	writeData(void *ptr, size_t size, size_t nmemb, FILE *stream)
   {
     size_t written;
     written = fwrite(ptr, size, nmemb, stream);
@@ -32,11 +32,12 @@ public:
     CURLcode	res;
 
     curl = curl_easy_init();
+    printf("Calling %s\n", url.c_str());
     if (curl) {
       fp = fopen(filePath.c_str(), "wb");
       curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
       curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
-      curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+      curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeData);
       curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
       res = curl_easy_perform(curl);
       (void) res;

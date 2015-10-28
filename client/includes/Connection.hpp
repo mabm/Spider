@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 02:29:24 2015 Joris Bertomeu
-// Last update Wed Oct 28 01:57:13 2015 Joris Bertomeu
+// Last update Wed Oct 28 14:23:34 2015 Joris Bertomeu
 //
 
 #ifndef		_CONNECTION_HPP_
@@ -79,7 +79,7 @@ private:
     trame.id = 0b1;
     trame.crc = 42;
     trame.size = 24;
-    strcpy(trame.data, "data\r\n");
+    strcpy(trame.data, "toto");
     std::cout << "Size : " << sizeof(t_trame) << std::endl;
     memcpy(&tmp, &trame, sizeof(t_trame));
     this->write(tmp, sizeof(t_trame));

@@ -5,7 +5,7 @@
 // Login   <mediav_j@epitech.net>
 //
 // Started on  Mon Oct 26 15:32:58 2015 Jérémy Mediavilla
-// Last update Tue Oct 27 23:38:43 2015 Joris Bertomeu
+// Last update Wed Oct 28 10:52:07 2015 Joris Bertomeu
 //
 
 #include <CurrentWindowCommand.hh>
@@ -20,7 +20,7 @@ CurrentWindowCommand::~CurrentWindowCommand()
 
 }
 
-bool		CurrentWindowCommand::execCommand(const std::string &command)
+bool		CurrentWindowCommand::execCommand(const std::string &srvId, const std::string &clientId, const std::string &command)
 {
   (void)command;
   return (true);

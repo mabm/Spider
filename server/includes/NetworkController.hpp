@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 00:55:19 2015 Joris Bertomeu
-// Last update Tue Oct 27 22:26:26 2015 Joris Bertomeu
+// Last update Wed Oct 28 11:09:10 2015 Joris Bertomeu
 //
 
 #ifndef		_NETWORKCONTROLLER_HPP_
@@ -15,7 +15,6 @@
 # include	<NetworkView.hpp>
 # include	<stdexcept>
 # include	<sstream>
-# include	<HttpPost.hpp>
 
 # include	<CurrentWindowCommand.hh>
 # include	<KeyCommand.hh>

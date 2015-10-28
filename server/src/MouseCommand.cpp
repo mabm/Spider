@@ -5,7 +5,7 @@
 // Login   <mediav_j@epitech.net>
 //
 // Started on  Mon Oct 26 15:32:04 2015 Jérémy Mediavilla
-// Last update Tue Oct 27 23:40:42 2015 Joris Bertomeu
+// Last update Wed Oct 28 10:51:46 2015 Joris Bertomeu
 //
 
 
@@ -21,7 +21,7 @@ MouseCommand::~MouseCommand()
 
 }
 
-bool		MouseCommand::execCommand(const std::string &command)
+bool		MouseCommand::execCommand(const std::string &srvId, const std::string &clientId, const std::string &command)
 {
   (void)command;
   return (true);
