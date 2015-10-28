@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 00:34:45 2015 Joris Bertomeu
-// Last update Wed Oct 21 01:40:59 2015 Joris Bertomeu
+// Last update Tue Oct 27 22:04:09 2015 Joris Bertomeu
 //
 #ifndef		_SERVER_HPP_
 # define	_SERVER_HPP_
@@ -15,7 +15,7 @@
 class		Server
 {
 private:
-  NetworkController	_networkController;
+  NetworkController		_networkController;
 
 public:
   explicit	Server() {

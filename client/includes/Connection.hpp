@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 02:29:24 2015 Joris Bertomeu
-// Last update Wed Oct 21 12:17:26 2015 Joris Bertomeu
+// Last update Wed Oct 28 01:57:13 2015 Joris Bertomeu
 //
 
 #ifndef		_CONNECTION_HPP_
@@ -25,6 +25,14 @@
 
 class		Connection : public IConnection, public boost::enable_shared_from_this<Connection>
 {
+private:
+    typedef struct	s_trame {
+    char		id;
+    int			size;
+    int			crc;
+    char		data[255];
+  }			t_trame;
+
 public:
   typedef	boost::shared_ptr<Connection>	ptr;
   static ptr	create(boost::asio::io_service &io_service) {
@@ -33,9 +41,9 @@ public:
   boost::asio::ip::tcp::socket&	socket() {
     return this->_socket;
   }
-  void		write(const std::string &trame) {
+  void		write(char * trame, int size) {
     boost::asio::async_write(this->_socket,
-    			     boost::asio::buffer(trame),
+    			     boost::asio::buffer(trame, size),
     			     boost::bind(&Connection::handleWrite, shared_from_this(),
     					 boost::asio::placeholders::error,
     			        	 boost::asio::placeholders::bytes_transferred));
@@ -60,11 +68,21 @@ private:
       this->close();
   }
   void			handleRead(const boost::system::error_code &e, size_t bytes_transferred) {
+    std::string		response("c\r\n");
     std::string		data;
     std::istream	is(&this->_buff);
+    t_trame		trame;
+    char		tmp[sizeof(t_trame)];
 
     std::getline(is, data);
     std::cout << "From " << this->_socket.remote_endpoint().address().to_string() << " : " << data << std::endl;
+    trame.id = 0b1;
+    trame.crc = 42;
+    trame.size = 24;
+    strcpy(trame.data, "data\r\n");
+    std::cout << "Size : " << sizeof(t_trame) << std::endl;
+    memcpy(&tmp, &trame, sizeof(t_trame));
+    this->write(tmp, sizeof(t_trame));
     if (!e)
       this->read();
     else

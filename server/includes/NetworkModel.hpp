@@ -5,17 +5,20 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 00:59:38 2015 Joris Bertomeu
-// Last update Wed Oct 21 01:49:18 2015 Joris Bertomeu
+// Last update Tue Oct 27 22:08:49 2015 Joris Bertomeu
 //
 
 #ifndef		_NETWORKMODEL_HPP_
 # define	_NETWORKMODEL_HPP_
 # include	<stdexcept>
+# include	<ICommand.hpp>
+# include	<list>
 
 class		NetworkModel
 {
 private:
-  int		_portNo;
+  int			_portNo;
+  std::list<ICommand*>	_commandsList;
 
 public:
   explicit	NetworkModel() :
@@ -31,6 +34,12 @@ public:
   }
   const int	&getPortNo() const {
     return (this->_portNo);
+  }
+  void		setCommandsList(const std::list<ICommand*> list) {
+    this->_commandsList = list;
+  }
+  std::list<ICommand*>	&getCommandsList() {
+    return (this->_commandsList);
   }
 };
 

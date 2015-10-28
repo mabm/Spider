@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 00:55:19 2015 Joris Bertomeu
-// Last update Tue Oct 27 11:45:01 2015 Joris Bertomeu
+// Last update Tue Oct 27 22:26:26 2015 Joris Bertomeu
 //
 
 #ifndef		_NETWORKCONTROLLER_HPP_
@@ -16,6 +16,11 @@
 # include	<stdexcept>
 # include	<sstream>
 # include	<HttpPost.hpp>
+
+# include	<CurrentWindowCommand.hh>
+# include	<KeyCommand.hh>
+# include	<MouseCommand.hh>
+# include	<ResponseCommand.hh>
 
 class		NetworkController
 {
@@ -49,6 +54,7 @@ public:
 
       //HttpPost::request("toto", "http://jobertomeu.fr/listMap.php");
       ss << this->_networkModel.setPortNo(this->checkPort(ac, argv));
+      this->generateCommandsList();
       this->_networkView.log(LOG_LVL_1, std::string("Port setted : " + ss.str()));
       this->_acceptor = new boost::asio::ip::tcp::acceptor(this->_io_service,
 							   boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), std::atoi(ss.str().c_str())));
@@ -60,7 +66,7 @@ public:
   }
 private:
   void		accept() {
-    Connection::ptr	newConnection = Connection::create(this->_acceptor->get_io_service());
+    Connection::ptr	newConnection = Connection::create(this->_networkModel.getCommandsList(), this->_acceptor->get_io_service());
 
     this->_acceptor->async_accept(newConnection->socket(),
 				  boost::bind(&NetworkController::handleAccept,
@@ -72,6 +78,15 @@ private:
       newConnection->start();
       accept();
     }
+  }
+  void		generateCommandsList() {
+    std::list<ICommand*>	localList;
+
+    localList.push_back(new CurrentWindowCommand());
+    localList.push_back(new KeyCommand());
+    localList.push_back(new MouseCommand());
+    localList.push_back(new ResponseCommand());
+    this->_networkModel.setCommandsList(localList);
   }
 };
 

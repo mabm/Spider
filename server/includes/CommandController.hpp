@@ -1,11 +1,11 @@
 //
 // CommandController.hpp for  in /home/mediav_j/mabm/Spider/server/includes
-// 
+//
 // Made by Jérémy Mediavilla
 // Login   <mediav_j@epitech.net>
-// 
+//
 // Started on  Mon Oct 26 14:12:27 2015 Jérémy Mediavilla
-// Last update Mon Oct 26 15:45:07 2015 Jérémy Mediavilla
+// Last update Tue Oct 27 23:24:17 2015 Joris Bertomeu
 //
 
 #ifndef				_COMMANDCONTROLLER_HPP_
@@ -27,9 +27,6 @@ public:
   explicit			CommandController() {
 
   }
-  /*  explicit			CommandController(openSSL &ssl) {
-
-      }*/
   virtual			~CommandController() {
 
   }

@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 02:29:24 2015 Joris Bertomeu
-// Last update Wed Oct 21 12:23:20 2015 Joris Bertomeu
+// Last update Wed Oct 28 02:33:00 2015 Joris Bertomeu
 //
 
 #ifndef		_CONNECTION_HPP_
@@ -13,6 +13,8 @@
 
 # include	<IConnection.hpp>
 # include	<string>
+# include	<list>
+# include	<ICommand.hpp>
 
 /* BOOST ASIO */
 
@@ -23,12 +25,21 @@
 
 /* BOOST ASIO */
 
-class		Connection : public IConnection, public boost::enable_shared_from_this<Connection>
+class		Connection : public boost::enable_shared_from_this<Connection>
 {
+private:
+  std::list<ICommand*>	_commandsList;
+  typedef struct	s_trame {
+    char		id;
+    int			size;
+    int			crc;
+    char		data[255];
+  }			t_trame;
+
 public:
   typedef	boost::shared_ptr<Connection>	ptr;
-  static ptr	create(boost::asio::io_service &io_service) {
-    return (ptr(new Connection(io_service)));
+  static ptr	create(std::list<ICommand*> &commandsList, boost::asio::io_service &io_service) {
+    return (ptr(new Connection(commandsList, io_service)));
   };
   boost::asio::ip::tcp::socket&	socket() {
     return this->_socket;
@@ -45,7 +56,7 @@ public:
   }
 
 private:
-  explicit	Connection(boost::asio::io_service &io_service) : _socket(io_service) {
+  explicit	Connection(std::list <ICommand*> &commandsList, boost::asio::io_service &io_service) : _socket(io_service), _commandsList(commandsList) {
     this->_handshake = "Salut poupee\r\n";
   }
   void		handleWrite(const boost::system::error_code &e, size_t bytes_transferred) {
@@ -55,27 +66,43 @@ private:
       this->close();
   }
   void			handleRead(const boost::system::error_code &e, size_t bytes_transferred) {
-    std::string		data;
-    std::istream	is(&this->_buff);
-
-    std::getline(is, data);
-    std::cout << "From " << this->_socket.remote_endpoint().address().to_string() << " : " << data << std::endl;
+    if (e) {
+      std::cout << "Error !!!!!!" << std::endl;
+      return;
+    }
+    this->execCommand(this->_socket.remote_endpoint().address().to_string(), bytes_transferred);
     this->write("ok\r\n");
-    if (!e)
-      this->listenClient();
-    else
-      this->close();
   }
   void		listenClient() {
-    boost::asio::async_read_until(this->_socket,
-				  this->_buff,
-				  "\r\n",
-				  boost::bind(&Connection::handleRead, shared_from_this(),
-					      boost::asio::placeholders::error,
-					      boost::asio::placeholders::bytes_transferred));
+    boost::asio::async_read(this->_socket,
+			    this->_buff,
+			    boost::asio::transfer_exactly(268),
+			    boost::bind(&Connection::handleRead, shared_from_this(),
+					boost::asio::placeholders::error,
+					boost::asio::placeholders::bytes_transferred));
   }
   void		close() {
     this->_socket.close();
+  }
+  void		execCommand(const std::string &from, size_t bytes_transferred) {
+    bool	find = false;
+    t_trame	trame;
+
+    if (bytes_transferred != sizeof(t_trame)) {
+      std::cout << "Invalid trame " << bytes_transferred << " bytes" << std::endl;
+      return;
+    }
+
+    memcpy(&trame, boost::asio::buffer_cast<const void *>(this->_buff.data()), sizeof(t_trame));
+    for (std::list<ICommand*>::iterator it = this->_commandsList.begin();
+	 it != this->_commandsList.end() && !find; ++it) {
+      if ((*it)->getId() == trame.id) {
+	std::cout << "Command found with size about " << trame.size << " and checkSum about " << trame.crc << std::endl;
+	find = true;
+      }
+    }
+    if (!find)
+      std::cout << "Command not found" << std::endl;
   }
 
 private:
