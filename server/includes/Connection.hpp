@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 02:29:24 2015 Joris Bertomeu
-// Last update Wed Oct 28 02:33:00 2015 Joris Bertomeu
+// Last update Wed Oct 28 02:50:44 2015 Joris Bertomeu
 //
 
 #ifndef		_CONNECTION_HPP_
@@ -98,6 +98,7 @@ private:
 	 it != this->_commandsList.end() && !find; ++it) {
       if ((*it)->getId() == trame.id) {
 	std::cout << "Command found with size about " << trame.size << " and checkSum about " << trame.crc << std::endl;
+	(*it)->execCommand(std::string(trame.data));
 	find = true;
       }
     }

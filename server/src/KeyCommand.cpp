@@ -5,7 +5,7 @@
 // Login   <mediav_j@epitech.net>
 //
 // Started on  Mon Oct 26 15:23:34 2015 Jérémy Mediavilla
-// Last update Tue Oct 27 23:39:36 2015 Joris Bertomeu
+// Last update Wed Oct 28 03:29:46 2015 Joris Bertomeu
 //
 
 #include <KeyCommand.hh>
@@ -23,6 +23,8 @@ KeyCommand::~KeyCommand()
 bool		KeyCommand::execCommand(const std::string &command)
 {
   (void)command;
+  std::cout << "Key Command" << std::endl;
+
   return (true);
 }
 
