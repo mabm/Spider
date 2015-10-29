@@ -5,7 +5,7 @@
 // Login   <mediav_j@epitech.net>
 //
 // Started on  Mon Oct 26 15:34:08 2015 Jérémy Mediavilla
-// Last update Wed Oct 28 10:52:47 2015 Joris Bertomeu
+// Last update Thu Oct 29 00:39:51 2015 Joris Bertomeu
 //
 
 #include <ResponseCommand.hh>
@@ -23,6 +23,8 @@ ResponseCommand::~ResponseCommand()
 bool		ResponseCommand::execCommand(const std::string &srvId, const std::string &clientId, const std::string &command)
 {
   (void)command;
+  (void) srvId;
+  (void) clientId;
   return (true);
 }
 

@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 00:55:19 2015 Joris Bertomeu
-// Last update Wed Oct 28 11:09:10 2015 Joris Bertomeu
+// Last update Thu Oct 29 00:37:37 2015 Joris Bertomeu
 //
 
 #ifndef		_NETWORKCONTROLLER_HPP_
@@ -39,7 +39,8 @@ public:
   int		checkPort(int ac, char **argv) const {
     int		i = 0;
 
-    while (i < std::string(argv[1]).size()) {
+    (void) ac;
+    while (i < (int) std::string(argv[1]).size()) {
       if (!(argv[1][i] >= '0' && argv[1][i] <= '9') && argv[1][i] != '-')
 	throw std::logic_error("Invalid port number");
       i++;

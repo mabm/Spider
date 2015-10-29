@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 02:29:24 2015 Joris Bertomeu
-// Last update Thu Oct 29 00:05:34 2015 Joris Bertomeu
+// Last update Thu Oct 29 00:29:16 2015 Joris Bertomeu
 //
 
 #ifndef		_CONNECTION_HPP_
@@ -58,10 +58,12 @@ public:
   }
 
 private:
-  explicit	Connection(std::list <ICommand*> &commandsList, boost::asio::io_service &io_service) : _socket(io_service), _commandsList(commandsList) {
+  explicit	Connection(std::list <ICommand*> &commandsList, boost::asio::io_service &io_service) : _socket(io_service) {
+    this->_commandsList = commandsList;
     this->_handshake = "Salut poupee\r\n";
   }
   void		handleWrite(const boost::system::error_code &e, size_t bytes_transferred) {
+    (void) bytes_transferred;
     if (!e)
       this->listenClient();
     else

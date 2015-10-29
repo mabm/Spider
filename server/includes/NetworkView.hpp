@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 01:03:16 2015 Joris Bertomeu
-// Last update Wed Oct 21 01:52:25 2015 Joris Bertomeu
+// Last update Thu Oct 29 00:29:36 2015 Joris Bertomeu
 //
 
 #ifndef		_NETWORKVIEW_HPP_
@@ -24,6 +24,7 @@ public:
 
   }
   void		log(int logLvl, std::string str) const {
+    (void) logLvl;
     std::cout << str << std::endl;
   }
 };
