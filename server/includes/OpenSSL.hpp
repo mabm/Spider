@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 28 14:51:52 2015 Joris Bertomeu
-// Last update Thu Oct 29 00:04:30 2015 Joris Bertomeu
+// Last update Thu Oct 29 00:14:13 2015 Joris Bertomeu
 //
 
 #ifndef		_OPENSSL_HPP_
@@ -30,7 +30,7 @@ private:
 
     if (fpPub == NULL || fpPriv == NULL) {
       printf("Unable to open RSA Key\n");
-      return NULL;
+      return;
     }
     this->_pubKey = RSA_new();
     this->_privKey = RSA_new();
@@ -45,14 +45,6 @@ public:
     this->generateRSA(std::string("public.pem"), std::string("private.pem"));
   }
   virtual	~OpenSSL() {}
-  void		printLastError(char *msg)
-  {
-    char * err = (char*) malloc(130);;
-    ERR_load_crypto_strings();
-    ERR_error_string(ERR_get_error(), err);
-    printf("%s ERROR: %s\n",msg, err);
-    free(err);
-  }
   std::string	decrypt(unsigned char *str) {
     unsigned char	*decrypt = (unsigned char*) malloc(4096);
     int			ret;
