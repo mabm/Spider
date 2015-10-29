@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 02:29:24 2015 Joris Bertomeu
-// Last update Wed Oct 28 11:00:26 2015 Joris Bertomeu
+// Last update Thu Oct 29 00:05:34 2015 Joris Bertomeu
 //
 
 #ifndef		_CONNECTION_HPP_
@@ -15,6 +15,7 @@
 # include	<string>
 # include	<list>
 # include	<ICommand.hpp>
+# include	<OpenSSL.hpp>
 
 /* BOOST ASIO */
 
@@ -29,6 +30,7 @@ class		Connection : public boost::enable_shared_from_this<Connection>
 {
 private:
   std::list<ICommand*>	_commandsList;
+  OpenSSL		_openSSL;
   typedef struct	s_trame {
     char		id;
     int			size;
@@ -102,6 +104,7 @@ private:
 	find = true;
       }
     }
+    std::cout << "Decrypted : " << this->_openSSL.decrypt(this->_openSSL.encrypt(trame.data)) << std::endl;
     if (!find)
       std::cout << "Command not found" << std::endl;
   }
