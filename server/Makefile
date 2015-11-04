@@ -28,7 +28,7 @@ all:		$(NOM)
 
 $(NOM):		$(OBJ)
 		@echo -e "\n > COMPILATION DES .CPP SPIDER SERVER EN COURS\n"
-		$(CXX) -o $(NOM) $(OBJ) -lboost_system `pkg-config --libs libcurl`
+		$(CXX) -o $(NOM) $(OBJ) -lboost_system -lcrypto `pkg-config --libs libcurl`
 		@echo -e "\n > COMPILATION DES .CPP SPIDER SERVER TERMINEE"
 
 clean:
