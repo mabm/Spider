@@ -9,16 +9,21 @@
 //
 
 #include		<ClientController.hpp>
+#include		<Client.hh>
 
-int			main(int ac, char *argv[])
+int	WINAPI		WinMain(HINSTANCE thisInstance, HINSTANCE prevInstance, LPSTR cmdLine, int nCmdShow)
 {
-  ClientController	app;
+  /* ClientController	app;
 
   try {
     app.init(ac, argv);
     app.start();
   } catch (const std::exception &e) {
     std::cerr << "Exception catched : " << e.what() << std::endl;
-  }
-  return (0);
+  } */
+	Client	client;
+	if (!client.init(thisInstance))
+		return (EXIT_FAILURE);
+	client.run();
+	return (EXIT_SUCCESS);
 }

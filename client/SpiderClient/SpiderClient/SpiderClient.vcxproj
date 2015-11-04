@@ -121,12 +121,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\Client.cpp" />
+    <ClCompile Include="..\..\src\ClientWindow.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\includes\Client.hh" />
     <ClInclude Include="..\..\includes\ClientController.hpp" />
     <ClInclude Include="..\..\includes\ClientModel.hpp" />
     <ClInclude Include="..\..\includes\ClientView.hpp" />
+    <ClInclude Include="..\..\includes\ClientWindow.h" />
     <ClInclude Include="..\..\includes\Connection.hpp" />
     <ClInclude Include="..\..\includes\IConnection.hpp" />
     <ClInclude Include="..\..\includes\NetworkController.hpp" />
