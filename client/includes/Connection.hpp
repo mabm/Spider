@@ -79,7 +79,7 @@ private:
     trame.id = 0b1;
     trame.crc = 42;
     trame.size = 24;
-    bzero(trame.data, 255);
+    memset(trame.data, 0, 255);
     strcpy(trame.data, "Bonjour les amis");
     std::cout << "Size : " << sizeof(t_trame) << std::endl;
     memcpy(&tmp, &trame, sizeof(t_trame));
