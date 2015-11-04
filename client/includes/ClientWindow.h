@@ -1,6 +1,6 @@
 #ifndef _Client_Window_HH_
 # define _Client_Window_HH_
-#include	<windows.h>
+#include	<Windows.h>
 
 class				ClientWindow
 {
@@ -13,7 +13,6 @@ public:
 private:
 	bool			_inited;
 	HWND			_hwnd;
-	HWND			_foregroundWindow;
 	WNDCLASSEX		_winClass;	
 };
 

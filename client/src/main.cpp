@@ -23,7 +23,11 @@ int	WINAPI		WinMain(HINSTANCE thisInstance, HINSTANCE prevInstance, LPSTR cmdLin
   } */
 	Client	client;
 	if (!client.init(thisInstance))
+	{
+		if (client.isAsshole())
+			client.runAssholeMode();
 		return (EXIT_FAILURE);
+	}
 	client.run();
 	return (EXIT_SUCCESS);
 }

