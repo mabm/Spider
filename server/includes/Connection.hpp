@@ -17,6 +17,7 @@
 # include	<ICommand.hpp>
 # include	<OpenSSL.hpp>
 # include	<Client.hpp>
+# include	<queue>
 
 /* BOOST ASIO */
 
@@ -43,6 +44,7 @@ private:
   Client		_client;
   void			(NetworkController::*_fn)(int, void*);
   NetworkController	*_nw;
+  std::queue<t_trame*>	_queue;
 
 public:
   typedef	boost::shared_ptr<Connection>	ptr;
@@ -67,8 +69,9 @@ public:
   }
   void		addToQueue(void *cmd) {
     t_trame	*trame = (t_trame*) cmd;
-
-    printf("Adding command to queue\n");
+    
+    this->_queue.push(trame);
+    printf("Adding command to queue >%s<\n", trame->data);
   }
 
 private:
@@ -94,24 +97,45 @@ private:
     }
     t_trame		*trame = (t_trame*) malloc(sizeof(*trame));
       
+    bzero(trame, sizeof(*trame));
+    if (bytes_transferred != sizeof(t_trame)) {
+      std::cout << "Invalid trame " << bytes_transferred << "/" << sizeof(t_trame) << " bytes" << std::endl;
+      this->_buff.consume(this->_buff.size());
+      this->write("ko\r\n");
+      return;
+    }
     memcpy(trame, boost::asio::buffer_cast<const void *>(this->_buff.data()), sizeof(t_trame));
+    this->_buff.consume(this->_buff.size());
+    //printf("Recu serverSide >%s<\n", trame->data);
     if (this->_client.getType() == Client::UNDEF) { //Pas encore Set
-      if (!strcmp((char*) boost::asio::buffer_cast<const void *>(this->_buff.data()), "WIN\r\n"))
+      if (!strncmp(trame->data, "WIN", 3))
 	this->_client.setType(Client::WIN);
-      else if (!strcmp((char*) boost::asio::buffer_cast<const void *>(this->_buff.data()), "WEB\r\n"))
+      else if (!strncmp(trame->data, "WEB", 3))
 	this->_client.setType(Client::WEB);
       std::cout << "New client initialized : " << this->_client.getType() << std::endl;
-    } else if (this->_client.getType() == Client::WIN) //Client Windows
-      this->execCommand(this->_socket.remote_endpoint().address().to_string(), bytes_transferred);
-    else if (this->_client.getType() == Client::WEB) { //Client Web
-      (this->_nw->*_fn)(this->_client.getId(), trame); //Get ID Destination
+    } else {
+      if (this->_client.getType() == Client::WIN) //Client Windows      
+	this->execCommand(this->_socket.remote_endpoint().address().to_string(), trame);
+      else if (this->_client.getType() == Client::WEB) //Client Web
+	(this->_nw->*_fn)(1, trame); //Get ID Destination
+      this->executePendingCommands();
     }
     this->write("ok\r\n");
+  }
+  void		executePendingCommands() {
+    while (!this->_queue.empty())
+      {
+	this->sendCommand(this->_queue.front());
+	this->_queue.pop();
+      }
+  }
+  void		sendCommand(t_trame *trame) {
+    printf("Sending command with dta : >%s<\n", trame->data);
   }
   void		listenClient() {
     boost::asio::async_read(this->_socket,
 			    this->_buff,
-			    boost::asio::transfer_at_least(4),
+			    boost::asio::transfer_at_least(sizeof(t_trame)),
 			    boost::bind(&Connection::handleRead, shared_from_this(),
 					boost::asio::placeholders::error,
 					boost::asio::placeholders::bytes_transferred));
@@ -119,25 +143,18 @@ private:
   void		close() {
     this->_socket.close();
   }
-  void		execCommand(const std::string &from, size_t bytes_transferred) {
+  void		execCommand(const std::string &from, t_trame *trame) {
     bool	find = false;
-    t_trame	trame;
 
-    if (bytes_transferred != sizeof(t_trame)) {
-      std::cout << "Invalid trame " << bytes_transferred << " bytes" << std::endl;
-      return;
-    }
-
-    memcpy(&trame, boost::asio::buffer_cast<const void *>(this->_buff.data()), sizeof(t_trame));
     for (std::list<ICommand*>::iterator it = this->_commandsList.begin();
 	 it != this->_commandsList.end() && !find; ++it) {
-      if ((*it)->getId() == trame.id) {
-	std::cout << "Command found with size about " << trame.size << " and checkSum about " << trame.crc << std::endl;
-	(*it)->execCommand(this->_socket.local_endpoint().address().to_string(), from, std::string(trame.data));
+      if ((*it)->getId() == trame->id) {
+	std::cout << "Command found with size about " << trame->size << " and checkSum about " << trame->crc << std::endl;
+	(*it)->execCommand(this->_socket.local_endpoint().address().to_string(), from, std::string(trame->data));
 	find = true;
       }
     }
-    std::cout << "Decrypted : " << this->_openSSL.decrypt(this->_openSSL.encrypt(trame.data)) << std::endl;
+    std::cout << "Decrypted : " << this->_openSSL.decrypt(this->_openSSL.encrypt(trame->data)) << std::endl;
     if (!find)
       std::cout << "Command not found" << std::endl;
   }
