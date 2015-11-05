@@ -16,6 +16,7 @@
 # include	<list>
 # include	<ICommand.hpp>
 # include	<OpenSSL.hpp>
+# include	<Client.hpp>
 
 /* BOOST ASIO */
 
@@ -23,6 +24,8 @@
 # include	<boost/shared_ptr.hpp>
 # include	<boost/enable_shared_from_this.hpp>
 # include	<boost/asio.hpp>
+
+class NetworkController;
 
 /* BOOST ASIO */
 
@@ -37,11 +40,14 @@ private:
     int			crc;
     char		data[255];
   }			t_trame;
+  Client		_client;
+  void			(NetworkController::*_fn)(int, void*);
+  NetworkController	*_nw;
 
 public:
   typedef	boost::shared_ptr<Connection>	ptr;
-  static ptr	create(std::list<ICommand*> &commandsList, boost::asio::io_service &io_service) {
-    return (ptr(new Connection(commandsList, io_service)));
+  static ptr	create(std::list<ICommand*> &commandsList, boost::asio::io_service &io_service, void (NetworkController::*fn)(int, void*), NetworkController *nw, int id) {
+    return (ptr(new Connection(commandsList, io_service, fn, nw, id)));
   };
   boost::asio::ip::tcp::socket&	socket() {
     return this->_socket;
@@ -56,11 +62,23 @@ public:
   void		start() {
     this->write(this->_handshake);
   }
+  int		getId() const {
+    return (this->_client.getId());
+  }
+  void		addToQueue(void *cmd) {
+    t_trame	*trame = (t_trame*) cmd;
+
+    printf("Adding command to queue\n");
+  }
 
 private:
-  explicit	Connection(std::list <ICommand*> &commandsList, boost::asio::io_service &io_service) : _socket(io_service) {
+  explicit	Connection(std::list <ICommand*> &commandsList, boost::asio::io_service &io_service, void (NetworkController::*fn)(int, void*), NetworkController *nw, int id) : _socket(io_service) {
+    this->_client.setMe(this);
+    this->_client.setId(id);
     this->_commandsList = commandsList;
-    this->_handshake = "Salut poupee\r\n";
+    this->_handshake = "Spider_server_v1.1\r\n";
+    this->_fn = fn;
+    this->_nw = nw;
   }
   void		handleWrite(const boost::system::error_code &e, size_t bytes_transferred) {
     (void) bytes_transferred;
@@ -74,13 +92,26 @@ private:
       std::cout << "Error !!!!!!" << std::endl;
       return;
     }
-    this->execCommand(this->_socket.remote_endpoint().address().to_string(), bytes_transferred);
+    t_trame		*trame = (t_trame*) malloc(sizeof(*trame));
+      
+    memcpy(trame, boost::asio::buffer_cast<const void *>(this->_buff.data()), sizeof(t_trame));
+    if (this->_client.getType() == Client::UNDEF) { //Pas encore Set
+      if (!strcmp((char*) boost::asio::buffer_cast<const void *>(this->_buff.data()), "WIN\r\n"))
+	this->_client.setType(Client::WIN);
+      else if (!strcmp((char*) boost::asio::buffer_cast<const void *>(this->_buff.data()), "WEB\r\n"))
+	this->_client.setType(Client::WEB);
+      std::cout << "New client initialized : " << this->_client.getType() << std::endl;
+    } else if (this->_client.getType() == Client::WIN) //Client Windows
+      this->execCommand(this->_socket.remote_endpoint().address().to_string(), bytes_transferred);
+    else if (this->_client.getType() == Client::WEB) { //Client Web
+      (this->_nw->*_fn)(this->_client.getId(), trame); //Get ID Destination
+    }
     this->write("ok\r\n");
   }
   void		listenClient() {
     boost::asio::async_read(this->_socket,
 			    this->_buff,
-			    boost::asio::transfer_exactly(268),
+			    boost::asio::transfer_at_least(4),
 			    boost::bind(&Connection::handleRead, shared_from_this(),
 					boost::asio::placeholders::error,
 					boost::asio::placeholders::bytes_transferred));

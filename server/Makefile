@@ -8,7 +8,7 @@
 ## Last update Wed Oct 28 11:06:05 2015 Joris Bertomeu
 ##
 
-CXX		=	clang++
+CXX		=	g++
 
 CXXFLAGS	+=	-W -Wextra -Wall -Iincludes `pkg-config --cflags libcurl`
 

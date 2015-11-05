@@ -8,7 +8,7 @@
 ## Last update Wed Oct 21 10:55:24 2015 Joris Bertomeu
 ##
 
-CXX		=	clang++ -g3
+CXX		=	g++ -g3
 
 CXXFLAGS	+=	-W -Wextra -Wall -Iincludes
 

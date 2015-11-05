@@ -66,8 +66,10 @@ public:
   }
 private:
   void		accept() {
-    Connection::ptr	newConnection = Connection::create(this->_networkModel.getCommandsList(), this->_acceptor->get_io_service());
+    Connection::ptr	newConnection = Connection::create(this->_networkModel.getCommandsList(), this->_acceptor->get_io_service(), &NetworkController::sendExternalCommand, this, this->_networkModel.getCurrentIdClient());
 
+    this->_networkModel.addClient(newConnection);
+    newConnection->getId();
     this->_acceptor->async_accept(newConnection->socket(),
 				  boost::bind(&NetworkController::handleAccept,
 					      this, newConnection,
@@ -78,6 +80,9 @@ private:
       newConnection->start();
       accept();
     }
+  }
+void		sendExternalCommand(int clientId, void *cmd) {
+    this->_networkModel.getClientFromId(clientId)->addToQueue(cmd);
   }
   void		generateCommandsList() {
     std::list<ICommand*>	localList;
