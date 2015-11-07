@@ -17,6 +17,7 @@ void send_something(std::string host, int port, t_trame *trame)
   socket.connect(endpoint);
   boost::system::error_code error;
   socket.write_some(boost::asio::buffer(trame, sizeof(t_trame)), error);
+  while (1);
   socket.close();
 }
 
@@ -27,7 +28,7 @@ int main()
   trame->crc = 42;
   trame->size = 24;
   trame->id = 0x01;
-  strcpy(trame->data, "WEB");
+  strcpy(trame->data, "WIN");
   send_something("127.0.0.1", 4242, trame);
   return 0;
 }

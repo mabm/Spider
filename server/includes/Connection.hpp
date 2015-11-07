@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 02:29:24 2015 Joris Bertomeu
-// Last update Thu Oct 29 00:29:16 2015 Joris Bertomeu
+// Last update Sat Nov  7 13:07:42 2015 Joris Bertomeu
 //
 
 #ifndef		_CONNECTION_HPP_
@@ -69,7 +69,7 @@ public:
   }
   void		addToQueue(void *cmd) {
     t_trame	*trame = (t_trame*) cmd;
-    
+
     this->_queue.push(trame);
     printf("Adding command to queue >%s<\n", trame->data);
   }
@@ -90,13 +90,68 @@ private:
     else
       this->close();
   }
+  int     count_word(char *str)
+  {
+    int   i;
+    int   n;
+
+    i = 0;
+    n = 1;
+    while (str[i] != '\0' && str[i] != '\n')
+      {
+	if (str[i] == ',' && str[i + 1] != '\0')
+	  n++;
+	i++;
+      }
+    return (n);
+  }
+
+  int     countchar(char *str)
+  {
+    int   c;
+
+    c = 0;
+    while ((str[c] != ',') && (str[c] != '\0') && (str[c] != '\n'))
+      c++;
+    c += 1;
+    return (c);
+  }
+
+  char    **my_str_to_wordtab(char *str)
+  {
+    char  **tab;
+    int   i;
+    int   b;
+    int   a;
+
+    b = 0;
+    i = 0;
+    a = 0;
+    tab = (char**) malloc(sizeof(*tab) * ((count_word(str) + 1)));
+    while (str[i] != '\n' && str[i] != '\0')
+      {
+	if (str[i] == ',' || str[i] == '\n')
+	  {
+	    while (str[i] == ',')
+	      i++;
+	    a = a + 1;
+	    b = 0;
+	  }
+	tab[a] = (char*) malloc(sizeof(**tab) * ((countchar(str + i) + 1)));
+	while ((str[i] != ',')  && (str[i] != '\n') && (str[i] != '\0'))
+	  tab[a][b++] = str[i++];
+	tab[a][b] = '\0';
+      }
+    tab[a + 1] = 0;
+    return (tab);
+  }
   void			handleRead(const boost::system::error_code &e, size_t bytes_transferred) {
     if (e) {
       std::cout << "Error !!!!!!" << std::endl;
       return;
     }
     t_trame		*trame = (t_trame*) malloc(sizeof(*trame));
-      
+
     bzero(trame, sizeof(*trame));
     if (bytes_transferred != sizeof(t_trame)) {
       std::cout << "Invalid trame " << bytes_transferred << "/" << sizeof(t_trame) << " bytes" << std::endl;
@@ -114,10 +169,10 @@ private:
 	this->_client.setType(Client::WEB);
       std::cout << "New client initialized : " << this->_client.getType() << std::endl;
     } else {
-      if (this->_client.getType() == Client::WIN) //Client Windows      
+      if (this->_client.getType() == Client::WIN) //Client Windows
 	this->execCommand(this->_socket.remote_endpoint().address().to_string(), trame);
       else if (this->_client.getType() == Client::WEB) //Client Web
-	(this->_nw->*_fn)(1, trame); //Get ID Destination
+	(this->_nw->*_fn)(atoi(my_str_to_wordtab(trame->data)[0]), trame); //Get ID Destination
       this->executePendingCommands();
     }
     this->write("ok\r\n");
@@ -130,12 +185,12 @@ private:
       }
   }
   void		sendCommand(t_trame *trame) {
-    printf("Sending command with dta : >%s<\n", trame->data);
+    printf("Sending command with dta : >%s<\n", &(trame->data[sizeof(int)]));
   }
   void		listenClient() {
     boost::asio::async_read(this->_socket,
 			    this->_buff,
-			    boost::asio::transfer_at_least(sizeof(t_trame)),
+			    boost::asio::transfer_exactly(sizeof(t_trame)),
 			    boost::bind(&Connection::handleRead, shared_from_this(),
 					boost::asio::placeholders::error,
 					boost::asio::placeholders::bytes_transferred));
