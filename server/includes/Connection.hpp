@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 02:29:24 2015 Joris Bertomeu
-// Last update Sat Nov  7 13:07:42 2015 Joris Bertomeu
+// Last update Sat Nov  7 17:06:50 2015 Jérémy Mediavilla
 //
 
 #ifndef		_CONNECTION_HPP_
@@ -18,6 +18,7 @@
 # include	<OpenSSL.hpp>
 # include	<Client.hpp>
 # include	<queue>
+# include	<CRC.hpp>
 
 /* BOOST ASIO */
 
@@ -161,6 +162,10 @@ private:
     }
     memcpy(trame, boost::asio::buffer_cast<const void *>(this->_buff.data()), sizeof(t_trame));
     this->_buff.consume(this->_buff.size());
+    if (!CRC::verifyCRC(trame.crc, trame.data))
+      {
+	std::cerr << "Bad CRC" << std::endl;
+      }
     //printf("Recu serverSide >%s<\n", trame->data);
     if (this->_client.getType() == Client::UNDEF) { //Pas encore Set
       if (!strncmp(trame->data, "WIN", 3))

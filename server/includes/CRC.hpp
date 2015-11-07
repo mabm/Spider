@@ -5,7 +5,7 @@
 // Login   <mediav_j@epitech.net>
 // 
 // Started on  Sat Nov  7 16:40:14 2015 Jérémy Mediavilla
-// Last update Sat Nov  7 16:53:13 2015 Jérémy Mediavilla
+// Last update Sat Nov  7 17:05:20 2015 Jérémy Mediavilla
 //
 
 #ifndef			_CRC_HPP_
@@ -18,8 +18,8 @@ class			CRC
 public:
   explicit		CRC() {}
   virtual		~CRC() {}
-  static bool			verifyCRC(int first, int second) {
-    if (first == second)
+  static bool			verifyCRC(int crc, const std::string &str) {
+    if (crc == CRC::calcCRC(str))
       return(true);
     return (false);
   }
