@@ -13,16 +13,19 @@
 # include	<stdexcept>
 # include	<ICommand.hpp>
 # include	<list>
+# include	<Connection.hpp>
 
 class		NetworkModel
 {
 private:
   int			_portNo;
   std::list<ICommand*>	_commandsList;
+  std::list<Connection::ptr>	_clientList;
+  int			_clientId;
 
 public:
   explicit	NetworkModel() :
-    _portNo(0) {}
+    _portNo(0), _clientId(0) {}
   virtual	~NetworkModel() {
 
   }
@@ -40,6 +43,21 @@ public:
   }
   std::list<ICommand*>	&getCommandsList() {
     return (this->_commandsList);
+  }
+  void		addClient(Connection::ptr con) {
+    this->_clientList.push_back(con);
+  }
+  Connection::ptr	getClientFromId(int id) {
+    for (std::list<Connection::ptr>::iterator it = this->_clientList.begin();
+	 it != this->_clientList.end();
+	 ++it) {
+      if ((*it)->getId() == id)
+      	return (*it);
+    }
+    throw (std::logic_error("Client not found"));
+  }
+  int			getCurrentIdClient() {
+    return (this->_clientId++);
   }
 };
 

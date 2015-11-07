@@ -5,10 +5,10 @@
 ## Login   <mediav_j@epitech.net>
 ## 
 ## Started on  Tue Jun  9 19:35:05 2015 Jérémy Mediavilla
-## Last update Wed Oct 28 11:06:05 2015 Joris Bertomeu
+## Last update Sat Nov  7 12:20:58 2015 Joris Bertomeu
 ##
 
-CXX		=	clang++
+CXX		=	g++
 
 CXXFLAGS	+=	-W -Wextra -Wall -Iincludes `pkg-config --cflags libcurl`
 
