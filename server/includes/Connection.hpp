@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 02:29:24 2015 Joris Bertomeu
-// Last update Sat Nov  7 17:06:50 2015 Jérémy Mediavilla
+// Last update Sat Nov  7 16:41:44 2015 Joris Bertomeu
 //
 
 #ifndef		_CONNECTION_HPP_
@@ -162,7 +162,7 @@ private:
     }
     memcpy(trame, boost::asio::buffer_cast<const void *>(this->_buff.data()), sizeof(t_trame));
     this->_buff.consume(this->_buff.size());
-    if (!CRC::verifyCRC(trame.crc, trame.data))
+    if (!CRC::verifyCRC(trame->crc, trame->data))
       {
 	std::cerr << "Bad CRC" << std::endl;
       }
