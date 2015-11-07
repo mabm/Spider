@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\Client.cpp" />
     <ClCompile Include="..\..\src\ClientWindow.cpp" />
+    <ClCompile Include="..\..\src\Keylogger.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +136,7 @@
     <ClInclude Include="..\..\includes\ClientWindow.h" />
     <ClInclude Include="..\..\includes\Connection.hpp" />
     <ClInclude Include="..\..\includes\IConnection.hpp" />
+    <ClInclude Include="..\..\includes\Keylogger.hh" />
     <ClInclude Include="..\..\includes\NetworkController.hpp" />
     <ClInclude Include="..\..\includes\NetworkModel.hpp" />
     <ClInclude Include="..\..\includes\NetworkView.hpp" />
