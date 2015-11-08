@@ -22,8 +22,6 @@ bool Client::init(const HINSTANCE & instance, const int & ac, LPWSTR * av)
 
 bool Client::setProtection()
 {
-	return (true);
-	// supprimer avant release
 	PPEB ppeb = NULL;
 	if (IsDebuggerPresent())
 	{

