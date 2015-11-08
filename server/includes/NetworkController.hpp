@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 00:55:19 2015 Joris Bertomeu
-// Last update Thu Oct 29 00:37:37 2015 Joris Bertomeu
+// Last update Sat Nov  7 17:23:13 2015 Joris Bertomeu
 //
 
 #ifndef		_NETWORKCONTROLLER_HPP_
@@ -69,7 +69,6 @@ private:
     Connection::ptr	newConnection = Connection::create(this->_networkModel.getCommandsList(), this->_acceptor->get_io_service(), &NetworkController::sendExternalCommand, this, this->_networkModel.getCurrentIdClient());
 
     this->_networkModel.addClient(newConnection);
-    newConnection->getId();
     this->_acceptor->async_accept(newConnection->socket(),
 				  boost::bind(&NetworkController::handleAccept,
 					      this, newConnection,
@@ -82,7 +81,7 @@ private:
     }
   }
 void		sendExternalCommand(int clientId, void *cmd) {
-    this->_networkModel.getClientFromId(clientId)->addToQueue(cmd);
+  this->_networkModel.getClientFromId(clientId)->addToQueue(cmd);
   }
   void		generateCommandsList() {
     std::list<ICommand*>	localList;

@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Tue Oct 27 11:19:04 2015 Joris Bertomeu
-// Last update Wed Oct 28 11:30:33 2015 Joris Bertomeu
+// Last update Sat Nov  7 17:14:26 2015 Joris Bertomeu
 //
 
 #ifndef		_HTTPPOST_HPP_
@@ -14,17 +14,15 @@
 # include	<string>
 # include	<curl/curl.h>
 
-extern	"C" {
-  size_t	writeData(void *ptr, size_t size, size_t nmemb, FILE *stream)
+class		HttpPost
+{
+  static size_t	writeData(void *ptr, size_t size, size_t nmemb, FILE *stream)
   {
     size_t written;
     written = fwrite(ptr, size, nmemb, stream);
     return written;
   }
-}
 
-class		HttpPost
-{
 public:
   static bool	request(const std::string &filePath, const std::string &url) {
     CURL	*curl;

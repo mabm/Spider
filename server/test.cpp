@@ -4,19 +4,27 @@
 
 typedef struct	s_trame {
   char		id;
-  int			size;
-  int			crc;
+  int		size;
+  int		crc;
   char		data[255];
-}			t_trame;
+}		t_trame;
 
 void send_something(std::string host, int port, t_trame *trame)
 {
+  t_trame	data;
+
+  data.crc = 42;
+  data.size = 24;
+  data.id = 0b1;
+  strcpy(data.data, "Touche");
   boost::asio::io_service ios;
   boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(host), port);
   boost::asio::ip::tcp::socket socket(ios);
   socket.connect(endpoint);
   boost::system::error_code error;
   socket.write_some(boost::asio::buffer(trame, sizeof(t_trame)), error);
+  socket.read_some(boost::asio::buffer(trame, sizeof(t_trame)), error);
+  socket.write_some(boost::asio::buffer(&data, sizeof(t_trame)), error);
   while (1);
   socket.close();
 }

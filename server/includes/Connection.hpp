@@ -5,11 +5,15 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 02:29:24 2015 Joris Bertomeu
-// Last update Sat Nov  7 16:41:44 2015 Joris Bertomeu
+// Last update Sat Nov  7 18:47:13 2015 Joris Bertomeu
 //
 
 #ifndef		_CONNECTION_HPP_
 # define	_CONNECTION_HPP_
+
+#include <sstream>
+
+#define SSTR( x ) dynamic_cast< std::ostringstream & >(( std::ostringstream() << std::dec << x ) ).str()
 
 # include	<IConnection.hpp>
 # include	<string>
@@ -19,6 +23,7 @@
 # include	<Client.hpp>
 # include	<queue>
 # include	<CRC.hpp>
+# include	<HttpPost.hpp>
 
 /* BOOST ASIO */
 
@@ -26,6 +31,8 @@
 # include	<boost/shared_ptr.hpp>
 # include	<boost/enable_shared_from_this.hpp>
 # include	<boost/asio.hpp>
+# include	<iostream>
+# include	<fstream>
 
 class NetworkController;
 
@@ -46,6 +53,7 @@ private:
   void			(NetworkController::*_fn)(int, void*);
   NetworkController	*_nw;
   std::queue<t_trame*>	_queue;
+  int			_clientBDDId;
 
 public:
   typedef	boost::shared_ptr<Connection>	ptr;
@@ -63,6 +71,20 @@ public:
 					 boost::asio::placeholders::bytes_transferred));
   }
   void		start() {
+    std::ifstream	fd;
+    char	out[16];
+
+    bzero(out, 16);
+    HttpPost::request(".toto",
+		      std::string("http://jobertomeu.fr/spider/servlets/putClient?server=0&ip_addr=" +
+				  this->_socket.local_endpoint().address().to_string()));
+    fd.open(".toto");
+    if (!fd.is_open())
+      printf("Not openned\n");
+    fd >> out;
+    printf("-------> %s\n", out);
+    this->_clientBDDId = atoi(out);
+    printf("ID Set -> %d -> %s\n", this->_clientBDDId, out);
     this->write(this->_handshake);
   }
   int		getId() const {
@@ -164,7 +186,7 @@ private:
     this->_buff.consume(this->_buff.size());
     if (!CRC::verifyCRC(trame->crc, trame->data))
       {
-	std::cerr << "Bad CRC" << std::endl;
+    	std::cerr << "Bad CRC" << std::endl;
       }
     //printf("Recu serverSide >%s<\n", trame->data);
     if (this->_client.getType() == Client::UNDEF) { //Pas encore Set
@@ -190,7 +212,7 @@ private:
       }
   }
   void		sendCommand(t_trame *trame) {
-    printf("Sending command with dta : >%s<\n", &(trame->data[sizeof(int)]));
+    printf("Sending command with dta : >%s<\n", my_str_to_wordtab(trame->data)[1]);
   }
   void		listenClient() {
     boost::asio::async_read(this->_socket,
@@ -206,11 +228,12 @@ private:
   void		execCommand(const std::string &from, t_trame *trame) {
     bool	find = false;
 
+    (void) from;
     for (std::list<ICommand*>::iterator it = this->_commandsList.begin();
 	 it != this->_commandsList.end() && !find; ++it) {
       if ((*it)->getId() == trame->id) {
 	std::cout << "Command found with size about " << trame->size << " and checkSum about " << trame->crc << std::endl;
-	(*it)->execCommand(this->_socket.local_endpoint().address().to_string(), from, std::string(trame->data));
+	(*it)->execCommand(this->_socket.local_endpoint().address().to_string(), std::string(SSTR(this->_clientBDDId)), std::string(trame->data));
 	find = true;
       }
     }
