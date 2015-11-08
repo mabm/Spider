@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 00:55:19 2015 Joris Bertomeu
-// Last update Wed Oct 21 11:00:39 2015 Joris Bertomeu
+// Last update Sun Nov  8 03:38:16 2015 Joris Bertomeu
 //
 
 #ifndef		_NETWORKCONTROLLER_HPP_
@@ -64,7 +64,6 @@ private:
 							this->_networkModel.getSrvPort()),
 			 boost::bind(&NetworkController::handleConnect, this, newConnection,
 				     boost::asio::placeholders::error));
-    std::cout << "On passe ici" << std::endl;
   }
   void		handleConnect(Connection::ptr newConnection, const boost::system::error_code &e) {
     if (!e) {

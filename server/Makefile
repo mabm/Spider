@@ -5,7 +5,7 @@
 ## Login   <mediav_j@epitech.net>
 ## 
 ## Started on  Tue Jun  9 19:35:05 2015 Jérémy Mediavilla
-## Last update Sat Nov  7 12:20:58 2015 Joris Bertomeu
+## Last update Sat Nov  7 18:05:31 2015 Joris Bertomeu
 ##
 
 CXX		=	g++
@@ -28,7 +28,7 @@ all:		$(NOM)
 
 $(NOM):		$(OBJ)
 		@echo -e "\n > COMPILATION DES .CPP SPIDER SERVER EN COURS\n"
-		$(CXX) -o $(NOM) $(OBJ) -lboost_system -lcrypto `pkg-config --libs libcurl`
+		$(CXX) -o $(NOM) $(OBJ) -lboost_system -lcrypto `pkg-config --libs libcurl` -std=c++11
 		@echo -e "\n > COMPILATION DES .CPP SPIDER SERVER TERMINEE"
 
 clean:
