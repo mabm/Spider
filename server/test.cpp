@@ -16,7 +16,7 @@ void send_something(std::string host, int port, t_trame *trame)
   data.crc = 42;
   data.size = 24;
   data.id = 0b1;
-  strcpy(data.data, "Touche");
+  strcpy(data.data, "ToucheVoz");
   boost::asio::io_service ios;
   boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(host), port);
   boost::asio::ip::tcp::socket socket(ios);

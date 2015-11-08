@@ -5,7 +5,7 @@
 // Login   <jobertomeu@epitech.net>
 //
 // Started on  Wed Oct 21 00:55:19 2015 Joris Bertomeu
-// Last update Sat Nov  7 17:23:13 2015 Joris Bertomeu
+// Last update Sun Nov  8 03:40:31 2015 Joris Bertomeu
 //
 
 #ifndef		_NETWORKCONTROLLER_HPP_
@@ -81,7 +81,11 @@ private:
     }
   }
 void		sendExternalCommand(int clientId, void *cmd) {
-  this->_networkModel.getClientFromId(clientId)->addToQueue(cmd);
+  try {
+    this->_networkModel.getClientFromId(clientId)->addToQueue(cmd);
+  } catch (const std::exception &e) {
+    std::cerr << "Erreur catched : " << e.what() << std::endl;
+  }
   }
   void		generateCommandsList() {
     std::list<ICommand*>	localList;
